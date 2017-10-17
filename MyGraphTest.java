@@ -1,9 +1,13 @@
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class MyGraphTest {
-    MyGraph<String> g;
+
+    private MyGraph<String> g;
     @Test
     void addVertex() {
         for(int i = 0; i < 5; i++){
@@ -43,6 +47,7 @@ class MyGraphTest {
         assertTrue(g.addVertex(1, String.valueOf("Hello World!")));
         assertTrue(g.addVertex(2, String.valueOf("Goodbye Cruel World!")));
         assertTrue(g.addEdge(1,2, 20));
+        assertEquals(new Integer(20), g.getEdgeValue(1, 2));
         assertFalse(g.addEdge(1,2, 10));
         assertFalse(g.addEdge(1,1, 20));
     }
@@ -54,8 +59,9 @@ class MyGraphTest {
         assertTrue(g.addEdge(1,2, 20));
         assertFalse(g.addEdge(1,2, 10));
         assertFalse(g.addEdge(1,1, 20));
-        assertTrue(g.removeEdge(1,2));
         assertTrue(g.isAdjacent(1,2));
+        assertTrue(g.removeEdge(1,2));
+        assertFalse(g.isAdjacent(1,2));
     }
 
     @Test
@@ -71,6 +77,17 @@ class MyGraphTest {
 
     @Test
     void getNeighbors() {
+        for(int i = 0; i < 4; i++){
+            g.addVertex(i, "");
+        }
+        for(int i = 1; i < 4; i++){
+            g.addEdge(0, i);
+        }
+        assertEquals(Arrays.asList(1, 2, 3), g.getNeighbors(0));
+        g.removeEdge(0,2);
+        assertEquals(Arrays.asList(1, 3), g.getNeighbors(0));
+        g.removeVertex(3);
+        assertEquals(Arrays.asList(1), g.getNeighbors(0));
     }
 
     @Test

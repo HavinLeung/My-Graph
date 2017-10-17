@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MyGraph<V> {
     /*
@@ -50,7 +47,7 @@ public class MyGraph<V> {
         });
         //remove these edges from other vertices
         for(int i: otherVertices){
-            if(vertices.containsKey(i)){
+            if(containsVertex(i)){
                 vertices.get(i).removeEdge(id);
             }
         }
@@ -88,7 +85,7 @@ public class MyGraph<V> {
      * */
     public boolean addEdge(int id1, int id2, int weight){
         if(id1 == id2 || isAdjacent(id1, id2)) return false;
-        if(vertices.containsKey(id1) && vertices.containsKey(id2)){
+        if(containsVertex(id1) && containsVertex(id2)){
             vertices.get(id1).addEdge(id2, weight);
             vertices.get(id2).addEdge(id1, weight);
             return true;
@@ -108,12 +105,25 @@ public class MyGraph<V> {
      * @return true if the edge was removed, false otherwise
      * */
     public boolean removeEdge(int id1, int id2){
-        if(!(vertices.containsKey(id1) && vertices.containsKey(id2))){
+        if(!(containsVertex(id1) && containsVertex(id2))){
             return false;
         }
         MyVertex vert1 = vertices.get(id1);
         MyVertex vert2 = vertices.get(id2);
         return vert1.removeEdge(id2) && vert2.removeEdge(id1);
+    }
+    /**
+     * Gets value of the edge between vertices of ID1 and ID2
+     * @param id1 ID of the first vertex
+     * @param id2 ID of the second vertex
+     * @return value of the edge
+     * @exception NullPointerException Int unboxing may cause this exception if the edge does not exist
+     * */
+    public Integer getEdgeValue(int id1, int id2){
+        if(containsVertex(id1) && containsVertex(id2)){
+            return vertices.get(id1).getEdgeValue(id2);
+        }
+        return null;
     }
     /**
      * Checks whether or not the vertex with the given ID exists in the graph
@@ -130,13 +140,13 @@ public class MyGraph<V> {
      * @return true if edge exists, false otherwise
      * */
     public boolean isAdjacent(int id1, int id2){
-        if(id1 == id2) return true; //vacuously true?
+        if(id1 == id2) return true; //vacuously true? dunno tbh
         if(!containsVertex(id1) || !containsVertex(id2)) return false;
         return vertices.get(id1).containsEdge(id2) && vertices.get(id2).containsEdge(id1);
     }
     /**
      * Lists all vertices that are connected a vertex specified by the user
-     * @param id
+     * @param id ID of the vertex specified by the user
      * @return List of the ID's of all the vertices adjacent to the specified vertex. Returns null if vertex does not exist
      * */
     public List<Integer> getNeighbors(int id){
@@ -155,7 +165,32 @@ public class MyGraph<V> {
      * @return true if the graph is connected, false otherwise
      * */
     public boolean isConnected(){
-        //TODO: Logic
+        if(!vertices.isEmpty()){
+            Set<Integer> connectedSet = new HashSet<>();
+            //get all vertex ID's in an set
+            Set<Integer> keySet = vertices.keySet();
+            //choose a random vertex
+            connectedSet.add((Integer) keySet.toArray()[0]);
+            //Iterate until the sets are equal, or there are no more neighbors to be added
+            while(!connectedSet.equals(keySet)){
+                boolean added = false;
+                //for each vertex in connected set, get their neighbors and add to our connected set
+                for(int key: connectedSet){
+                    List<Integer> neighbors = getNeighbors(key);
+                    for(int neighbor: neighbors){
+                        if(!connectedSet.contains(neighbor)){
+                            added = true;
+                            connectedSet.add(neighbor);
+                        }
+                    }
+                }
+                //did not add any neighbors, but the sets are not equal
+                if(!added){
+                    return false;
+                }
+            }
+            return true;
+        }
         return false;
     }
     /**
@@ -218,11 +253,23 @@ public class MyGraph<V> {
          * @return true if the edge was removed, false if not
          * */
         private boolean removeEdge(int id){
-            if(weightedEdges.containsKey(id)){
+            if(!containsEdge(id)){
                 return false;
             }
             weightedEdges.remove(id);
             return true;
+        }
+        /**
+         * Returns the value of the edge that is associated with this vertex
+         * and the vertex specified with ID
+         * @param id ID of specified vertex
+         * @return weight of the edge
+         * */
+        private Integer getEdgeValue(int id){
+            if(containsEdge(id)){
+                return weightedEdges.get(id);
+            }
+            return null;
         }
         /**
          * Returns the truth value of whether or not this vertex is connected to
