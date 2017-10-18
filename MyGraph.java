@@ -12,11 +12,9 @@ public class MyGraph<V> {
     * */
 
     private Map<Integer, MyVertex> vertices;
-    private int numEdges;
 
     public MyGraph(){
         vertices = new HashMap<>();
-        numEdges = 0;
     }
     /**
      * Adds a vertex if and only if the vertex ID does not already exist.
@@ -167,16 +165,24 @@ public class MyGraph<V> {
     public boolean isConnected(){
         if(!vertices.isEmpty()){
             Set<Integer> connectedSet = new HashSet<>();
+            Set<Integer> foundNeighbors = new HashSet<>();
             //get all vertex ID's in an set
             Set<Integer> keySet = vertices.keySet();
             //choose a random vertex
-            connectedSet.add((Integer) keySet.toArray()[0]);
+            int temp = (Integer) keySet.toArray()[0];
+            connectedSet.add(temp);
             //Iterate until the sets are equal, or there are no more neighbors to be added
             while(!connectedSet.equals(keySet)){
                 boolean added = false;
                 //for each vertex in connected set, get their neighbors and add to our connected set
                 for(int key: connectedSet){
+                    //if already found that vertex's neighbors, skip this iteration
+                    if(foundNeighbors.contains(key)){
+                        continue;
+                    }
+                    foundNeighbors.add(key);
                     List<Integer> neighbors = getNeighbors(key);
+                    //add them all to the connected set
                     for(int neighbor: neighbors){
                         if(!connectedSet.contains(neighbor)){
                             added = true;
@@ -205,9 +211,7 @@ public class MyGraph<V> {
         //Check if graph is empty or disconnected
         return null;
     }
-    //    public MyGraph solveTSP(int id){
-//        return null;
-//    }
+
     @Override
     public String toString() {
         final String[] s = {String.format("This graph has %d vertices\n\n", vertices.size())};
@@ -240,12 +244,6 @@ public class MyGraph<V> {
         private boolean addEdge(int id, int weight){
             weightedEdges.put(id, weight);
             return false;
-        }
-        /**
-         * default {@link #addEdge(int, int) addEdge} method with weight as 1
-         * */
-        private boolean addEdge(int id){
-            return addEdge(id, 1);
         }
         /**
          * Removes the edge that connects this vertex to the vertex specified by the ID

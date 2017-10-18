@@ -92,6 +92,26 @@ class MyGraphTest {
 
     @Test
     void isConnected() {
+        for(int i = 1; i < 10; i++){
+            g.addVertex(i,"");
+        }
+        assertFalse(g.isConnected());
+        g.addEdge(1,2);
+        g.addEdge(1,3);
+        g.addEdge(1,4);
+        g.addEdge(3,4);
+        g.addEdge(2,4);
+        for(int i = 5; i < 10; i++){
+            g.addEdge(4,i);
+        }
+        assertTrue(g.isConnected());
+        g.removeEdge(2,4);
+        g.removeEdge(3,4);
+        assertTrue(g.isConnected());
+        g.removeEdge(4,7);
+        assertFalse(g.isConnected());
+        g.removeVertex(4);
+        assertFalse(g.isConnected());
     }
 
     @Test
