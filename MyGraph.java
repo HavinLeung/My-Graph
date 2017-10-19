@@ -357,7 +357,7 @@ public class MyGraph<V> {
          */
         private boolean addEdge(int id, int weight) {
             weightedEdges.put(id, weight);
-            return false;
+            return true;
         }
 
         /**
