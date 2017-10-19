@@ -43,7 +43,7 @@ public class Main {
         */
 
         // Good practice:
-        if(g.isConnected()){
+        if (g.isConnected()) {
             System.out.println(g.createMST().toString());
         }
         // Bad practice:

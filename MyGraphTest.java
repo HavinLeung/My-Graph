@@ -1,6 +1,5 @@
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -117,6 +116,24 @@ class MyGraphTest {
 
     @Test
     void createMST() {
+        // how tf do i test this?????
+        for (int i = 1; i < 10; i++) {
+            g.addVertex(i, "");
+        }
+        assertFalse(g.isConnected());
+        g.addEdge(1, 2);
+        g.addEdge(1, 3);
+        g.addEdge(1, 4);
+        g.addEdge(3, 4);
+        g.addEdge(2, 4);
+        for (int i = 5; i < 10; i++) {
+            g.addEdge(4, i);
+        }
+        assertTrue(g.isConnected());
+        MyGraph f = g.createMST();
+        assertTrue(f.isConnected());
+        //For a tree, number of edges is always number of vertices - 1
+        assertTrue(f.numEdges() == f.numVertices() - 1);
     }
 
     @org.junit.jupiter.api.BeforeEach

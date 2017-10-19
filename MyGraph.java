@@ -12,9 +12,25 @@ public class MyGraph<V> {
     * */
 
     private Map<Integer, MyVertex> vertices;
+    private int edges;
 
     public MyGraph() {
         vertices = new HashMap<>();
+        edges = 0;
+    }
+
+    /**
+     * @return number of vertices
+     */
+    public int numVertices() {
+        return vertices.size();
+    }
+
+    /**
+     * @return number of edges
+     */
+    public int numEdges() {
+        return edges;
     }
 
     /**
@@ -100,6 +116,7 @@ public class MyGraph<V> {
         if (containsVertex(id1) && containsVertex(id2)) {
             vertices.get(id1).addEdge(id2, weight);
             vertices.get(id2).addEdge(id1, weight);
+            edges++;
             return true;
         }
         return false;
@@ -125,7 +142,11 @@ public class MyGraph<V> {
         }
         MyVertex vert1 = vertices.get(id1);
         MyVertex vert2 = vertices.get(id2);
-        return vert1.removeEdge(id2) && vert2.removeEdge(id1);
+        if (vert1.removeEdge(id2) && vert2.removeEdge(id1)) {
+            edges--;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -304,7 +325,7 @@ public class MyGraph<V> {
 
     @Override
     public String toString() {
-        final String[] s = {String.format("This graph has %d vertices\n\n", vertices.size())};
+        final String[] s = {String.format("This graph has %d vertices and %d edges\n\n", vertices.size(), edges)};
         vertices.forEach((k, v) -> { //WOW MUCH FUNCTIONAL
             s[0] = s[0].concat(v.toString() + "\n\n");
         });
