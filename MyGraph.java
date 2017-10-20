@@ -166,6 +166,17 @@ public class MyGraph<V> {
         return null;
     }
 
+    public boolean changeEdgeValue(int id1, int id2, int weight){
+        //Check if edge exists
+        if(!(containsVertex(id1) && containsVertex(id2) && isAdjacent(id1, id2))){
+            return false;
+        }
+        //overwrite existing edge
+        vertices.get(id1).addEdge(id2, weight);
+        vertices.get(id2).addEdge(id1, weight);
+        return true;
+    }
+
     /**
      * Checks whether or not the vertex with the given ID exists in the graph
      *
