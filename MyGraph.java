@@ -102,6 +102,8 @@ public class MyGraph<V> {
         return false;
     }
 
+    //TODO: change edge value function
+
     /**
      * Adds an edge of a specified weight between the vertices with ID1 and ID2
      *
