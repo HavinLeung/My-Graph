@@ -102,8 +102,6 @@ public class MyGraph<V> {
         return false;
     }
 
-    //TODO: change edge value function
-
     /**
      * Adds an edge of a specified weight between the vertices with ID1 and ID2
      *
@@ -284,7 +282,7 @@ public class MyGraph<V> {
     /**
      * A MST (Minimum Spanning Tree) is a tree in which the branches are all of minimum weight.
      * This method will use Prim's algorithm. It is a greedy algorithm that starts at an
-     * arbitrary vertex (in this case, the one specified by the user) and at each step, choosing
+     * arbitrary vertex and at each step, choosing
      * the cheapest possible connection from the tree to another vertex not in the tree.
      *
      * @return returns a MyGraph instance containing one of the possible MST
